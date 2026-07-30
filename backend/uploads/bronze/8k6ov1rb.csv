@@ -1,0 +1,3 @@
+patient_id,name,age,gender,disease,hospital_name,doctor_name,admission_date,discharge_date,bill_amount,city
+PAT-501,Eleanor Rigby,62,Female,Cardiovascular Disease,Metro General Hospital,Dr. Alexander Wright,2026-07-01,2026-07-08,18500.0,New York
+PAT-502,George Harrison,58,Male,Diabetes Mellitus Type II,Johns Hopkins Medical Center,Dr. Elena Rostova,2026-07-03,2026-07-10,12400.0,Baltimore

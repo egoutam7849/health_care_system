@@ -1,0 +1,4 @@
+patient_id,name,age,gender,disease,hospital_name,doctor_name,admission_date,discharge_date,bill_amount,city
+PAT-8001,Johnathan Miller,54,Male,Cardiovascular Disease,Metro General Hospital,Dr. Alexander Wright,2026-07-01,2026-07-08,24500.0,New York
+PAT-8002,Sophia Martinez,42,Female,Diabetes Mellitus Type II,Johns Hopkins Medical Center,Dr. Emily Vance,2026-07-03,2026-07-10,18200.0,Baltimore
+PAT-8003,Corrupt Record Bad Bill,-10,Male,Pneumonia,Fortis Healthcare,Dr. Robert Thorne,2026-07-05,2026-07-12,-1500.0,Boston

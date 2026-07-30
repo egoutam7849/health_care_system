@@ -1,0 +1,4 @@
+patient_id,name,age,gender,disease,hospital_name,doctor_name,admission_date,discharge_date,bill_amount,city
+PAT-9001,Marcus Aurelius,62,Male,Cardiovascular Disease,Mayo Clinic Healthcare System,Dr. Emily Vance,2026-07-10,2026-07-18,34000.0,Rochester
+PAT-9002,Corrupt Row Negative Bill,-5,Female,Pneumonia,Cleveland Clinic,Dr. Alexander Wright,2026-07-12,2026-07-15,-2500.0,Cleveland
+PAT-9003,Helena Troy,38,Female,Diabetes Mellitus Type II,Johns Hopkins Medical Center,Dr. Sarah Jenkins,2026-07-14,2026-07-20,19500.0,Baltimore
