@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 export const DoctorLogin = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [email, setEmail] = useState('dr.wright@metrohealth.org');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('doctor123');
   const [loading, setLoading] = useState(false);
 
@@ -53,6 +53,23 @@ export const DoctorLogin = () => {
             </div>
             <h2 className="text-2xl font-black tracking-tight">Physician & Doctor Portal</h2>
             <p className="text-xs text-slate-400">Manage daily patient appointments, lab results, diagnoses & e-prescriptions</p>
+          </div>
+
+          <div className="flex gap-2 justify-center pb-2">
+            <button
+              type="button"
+              onClick={() => setEmail('john.smith@healthflow.ai')}
+              className={`px-3 py-1 text-[11px] font-bold rounded-lg transition-colors ${email === 'john.smith@healthflow.ai' ? 'bg-teal-500 text-slate-950' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}`}
+            >
+              Dr. John Smith
+            </button>
+            <button
+              type="button"
+              onClick={() => setEmail('e.rostova@jhmi.edu')}
+              className={`px-3 py-1 text-[11px] font-bold rounded-lg transition-colors ${email === 'e.rostova@jhmi.edu' ? 'bg-teal-500 text-slate-950' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}`}
+            >
+              Dr. Elena Rostova
+            </button>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">

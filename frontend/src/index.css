@@ -3,36 +3,79 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased selection:bg-health-500 selection:text-white;
+  html, body {
+    @apply antialiased font-sans;
+    background-color: #09090B !important;
+    color: #F8FAFC !important;
+  }
+
+  ::selection {
+    background-color: #3B82F6;
+    color: #FFFFFF;
   }
 }
 
-/* Glassmorphism custom utilities */
+/* Layered Enterprise Elevation System */
+.layer-canvas {
+  background-color: #09090B;
+}
+
+.layer-shell {
+  background-color: #111827;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.layer-section {
+  background-color: #1E293B;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.layer-card {
+  background-color: #243447;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.layer-hover {
+  background-color: #334155;
+}
+
+/* Glassmorphism Dark Overrides */
 .glass-card {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(30, 41, 59, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.dark .glass-card {
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(30, 41, 59, 0.8);
+/* Form input dark focus glow */
+.dark-input {
+  background-color: #111827;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #F8FAFC;
+  transition: all 0.15s ease-in-out;
 }
 
-/* Custom Scrollbar */
+.dark-input:focus {
+  outline: none;
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+}
+
+/* Dark Enterprise Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #09090B;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 dark:bg-slate-700 rounded-full hover:bg-slate-400 dark:hover:bg-slate-600;
+  background: #334155;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
 }

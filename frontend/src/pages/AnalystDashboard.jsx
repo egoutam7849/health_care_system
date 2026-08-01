@@ -17,7 +17,9 @@ export const AnalystDashboard = () => {
     return <div className="p-8 text-center text-slate-400">Loading Healthcare Analytics Workspace...</div>;
   }
 
-  const { gold_tables, warehouse_metrics } = data;
+  const { gold_tables = [], warehouse_metrics = {}, analytics = {} } = data;
+  const diseaseDist = analytics.disease_distribution || [];
+  const hospPerf = analytics.hospital_performance || [];
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white p-6 space-y-6">
@@ -30,7 +32,7 @@ export const AnalystDashboard = () => {
           <div>
             <h1 className="text-xl font-extrabold">Healthcare Business Intelligence Console</h1>
             <p className="text-xs text-slate-400 mt-1">
-              Read-Only Access to <span className="font-bold text-slate-700 dark:text-slate-200">Gold Medallion Storage</span> & <span className="font-bold text-slate-700 dark:text-slate-200">Star Schema Warehouse</span>
+              Live Analytical Access to <span className="font-bold text-slate-700 dark:text-slate-200">PostgreSQL Data Warehouse</span> & <span className="font-bold text-slate-700 dark:text-slate-200">Medallion Pipeline</span>
             </p>
           </div>
         </div>
@@ -44,43 +46,48 @@ export const AnalystDashboard = () => {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="glass-card p-5 rounded-2xl">
+          <span className="text-xs text-slate-400 font-bold block">Total Patients</span>
+          <span className="text-2xl font-black text-amber-600 dark:text-amber-400 mt-1 block">{(warehouse_metrics.total_patients || 0).toLocaleString()}</span>
+        </div>
+        <div className="glass-card p-5 rounded-2xl">
+          <span className="text-xs text-slate-400 font-bold block">Registered Doctors</span>
+          <span className="text-2xl font-black text-slate-800 dark:text-slate-200 mt-1 block">{(warehouse_metrics.total_doctors || 0).toLocaleString()}</span>
+        </div>
+        <div className="glass-card p-5 rounded-2xl">
+          <span className="text-xs text-slate-400 font-bold block">Scheduled Appointments</span>
+          <span className="text-2xl font-black text-teal-600 mt-1 block">{(warehouse_metrics.total_appointments || 0).toLocaleString()}</span>
+        </div>
         <div className="glass-card p-5 rounded-2xl">
           <span className="text-xs text-slate-400 font-bold block">Network Total Revenue</span>
-          <span className="text-2xl font-black text-amber-600 dark:text-amber-400 mt-1 block">${(warehouse_metrics.total_revenue / 1e6).toFixed(1)}M</span>
-        </div>
-        <div className="glass-card p-5 rounded-2xl">
-          <span className="text-xs text-slate-400 font-bold block">Average Stay Duration</span>
-          <span className="text-2xl font-black text-slate-800 dark:text-slate-200 mt-1 block">{warehouse_metrics.avg_stay_days} Days</span>
-        </div>
-        <div className="glass-card p-5 rounded-2xl">
-          <span className="text-xs text-slate-400 font-bold block">30-Day Readmission Rate</span>
-          <span className="text-2xl font-black text-emerald-600 mt-1 block">{warehouse_metrics.readmission_rate}%</span>
+          <span className="text-2xl font-black text-emerald-600 mt-1 block">${(warehouse_metrics.total_revenue || 0).toLocaleString()}</span>
         </div>
       </div>
 
       {/* Gold Layer & AI Summaries */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Warehouse Tables */}
+        {/* Disease Distribution from Live DB */}
         <div className="glass-card p-6 rounded-2xl space-y-4">
           <div className="flex items-center space-x-2">
             <Database className="w-5 h-5 text-amber-500" />
-            <h3 className="font-bold text-base">Warehouse Gold Data Objects</h3>
+            <h3 className="font-bold text-base">Live Disease Prevalence Distribution</h3>
           </div>
           <div className="space-y-3">
-            {gold_tables.map((t, idx) => (
-              <div key={idx} className="p-3 bg-slate-100 dark:bg-slate-800/60 rounded-xl flex items-center justify-between text-xs">
-                <div>
-                  <span className="font-bold text-slate-800 dark:text-slate-200 block">{t.table_name}</span>
-                  <span className="text-slate-400">{t.layer}</span>
+            {diseaseDist.length === 0 ? (
+              <div className="text-xs text-slate-400">No disease distribution records found.</div>
+            ) : (
+              diseaseDist.map((item, idx) => (
+                <div key={idx} className="p-3 bg-slate-100 dark:bg-slate-800/60 rounded-xl flex items-center justify-between text-xs">
+                  <span className="font-bold text-slate-800 dark:text-slate-200">{item.disease}</span>
+                  <span className="font-mono font-bold text-amber-600">{item.count} Patients</span>
                 </div>
-                <span className="font-mono font-bold text-amber-600">{t.rows.toLocaleString()} Rows</span>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
 
-        {/* AI Insights Summaries */}
+        {/* Executive AI Insights */}
         <div className="glass-card p-6 rounded-2xl space-y-4">
           <div className="flex items-center space-x-2">
             <Sparkles className="w-5 h-5 text-amber-500" />

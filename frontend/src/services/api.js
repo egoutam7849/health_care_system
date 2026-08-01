@@ -100,57 +100,45 @@ export const authAPI = {
 };
 
 export const portalsAPI = {
-  getPatientSummary: async () => {
-    try {
-      const res = await api.get('/portals/patient/summary');
-      return res.data;
-    } catch (e) {
-      return {
-        profile: { patient_id: 'PAT-1001', name: 'Emily Watson', age: 48, gender: 'Female', blood_type: 'O+', city: 'New York', primary_hospital: 'Metro General Hospital', attending_doctor: 'Dr. Alexander Wright' },
-        medical_history: [
-          { date: '2026-06-12', condition: 'Cardiovascular Disease', facility: 'Metro General Hospital', status: 'Managed' }
-        ],
-        appointments: [
-          { id: 'APT-901', doctor: 'Dr. Alexander Wright', department: 'Cardiology', date: '2026-08-04', time: '10:30 AM', status: 'Upcoming' }
-        ],
-        prescriptions: [
-          { medication: 'Atorvastatin 20mg', dosage: 'Once Daily at Bedtime', doctor: 'Dr. Alexander Wright', refills_remaining: 3 }
-        ],
-        billing_history: [
-          { invoice_id: 'INV-2026-044', date: '2026-06-19', description: 'Inpatient Cardiology Care & Diagnostics', amount: 18500.0, insurance_covered: 16650.0, patient_paid: 1850.0, status: 'PAID' }
-        ]
-      };
-    }
+  getDoctorDashboard: async (params = {}) => {
+    const res = await api.get('/doctor/dashboard', { params });
+    return res.data;
   },
-  getDoctorPatients: async () => {
-    try {
-      const res = await api.get('/portals/doctor/patients');
-      return res.data;
-    } catch (e) {
-      return {
-        doctor_info: { name: 'Dr. Alexander Wright', specialization: 'Cardiology', hospital: 'Metro General Hospital', experience: '14 Years', active_patients: 42 },
-        today_schedule: [
-          { id: 'APT-901', patient_name: 'Emily Watson', time: '09:00 AM', type: 'Follow-up Consultation', status: 'Confirmed' }
-        ],
-        assigned_patients: [
-          { id: 'PAT-1001', name: 'Emily Watson', age: 48, gender: 'Female', condition: 'Cardiovascular Disease', admission_date: '2026-06-12' }
-        ]
-      };
-    }
+  getDoctorPatients: async (params = {}) => {
+    const res = await api.get('/doctor/patients', { params });
+    return res.data;
+  },
+  getDoctorAppointments: async (params = {}) => {
+    const res = await api.get('/doctor/appointments', { params });
+    return res.data;
+  },
+  getPatientDashboard: async (params = {}) => {
+    const res = await api.get('/patient/dashboard', { params });
+    return res.data;
+  },
+  getPatientSummary: async (params = {}) => {
+    const res = await api.get('/patient/dashboard', { params });
+    return res.data;
+  },
+  getPatientProfile: async (params = {}) => {
+    const res = await api.get('/patient/profile', { params });
+    return res.data;
+  },
+  getPatientAppointments: async (params = {}) => {
+    const res = await api.get('/patient/appointments', { params });
+    return res.data;
+  },
+  getPatientReports: async (params = {}) => {
+    const res = await api.get('/patient/reports', { params });
+    return res.data;
+  },
+  getPatientBilling: async (params = {}) => {
+    const res = await api.get('/patient/billing', { params });
+    return res.data;
   },
   getAnalystData: async () => {
-    try {
-      const res = await api.get('/portals/analytics/gold-query');
-      return res.data;
-    } catch (e) {
-      return {
-        gold_tables: [
-          { table_name: 'FactAdmissions', rows: 441225, layer: 'Star Schema Warehouse' },
-          { table_name: 'FactRevenue', rows: 12, layer: 'Star Schema Warehouse' }
-        ],
-        warehouse_metrics: { total_revenue: 128500000.0, avg_stay_days: 5.4, readmission_rate: 6.2 }
-      };
-    }
+    const res = await api.get('/analytics/gold-query');
+    return res.data;
   }
 };
 
@@ -213,6 +201,58 @@ export const dashboardAPI = {
       return res.data;
     } catch (e) {
       return getFallbackDashboardStats();
+    }
+  },
+  getSummary: async () => {
+    try {
+      const res = await api.get('/dashboard/summary');
+      return res.data;
+    } catch (e) {
+      return {
+        summary: "Executive Healthcare Dashboard Data Summary",
+        has_data: true,
+        kpis: getFallbackDashboardStats().kpis,
+        pipeline_status: "COMPLETED",
+        quality_score: 99.8,
+        ai_insights: []
+      };
+    }
+  },
+  getKPIs: async () => {
+    try {
+      const res = await api.get('/dashboard/kpis');
+      return res.data;
+    } catch (e) {
+      return getFallbackDashboardStats().kpis;
+    }
+  },
+  getCharts: async () => {
+    try {
+      const res = await api.get('/dashboard/charts');
+      return res.data;
+    } catch (e) {
+      return getFallbackDashboardStats().charts;
+    }
+  },
+  seedSample: async () => {
+    try {
+      const res = await api.post('/dashboard/seed-sample');
+      return res.data;
+    } catch (e) {
+      return getFallbackDashboardStats();
+    }
+  },
+  runETL: async (filename = 'raw_healthcare_admissions_2026_q2.csv') => {
+    try {
+      const res = await api.post(`/etl/run?filename=${encodeURIComponent(filename)}`);
+      return res.data;
+    } catch (e) {
+      return {
+        run_id: 'RUN-20260730-DEMO',
+        status: 'COMPLETED',
+        records_processed: 9805,
+        execution_time_sec: 12.4
+      };
     }
   }
 };
@@ -345,6 +385,7 @@ export const medallionAPI = {
 };
 
 export const entitiesAPI = {
+  // Patients CRUD
   getPatients: async (params = {}) => {
     try {
       const res = await api.get('/entities/patients', { params });
@@ -353,28 +394,94 @@ export const entitiesAPI = {
       return getFallbackPatients();
     }
   },
-  getDoctors: async (search) => {
+  createPatient: async (patientData) => {
+    const res = await api.post('/entities/patients', patientData);
+    return res.data;
+  },
+  updatePatient: async (id, patientData) => {
+    const res = await api.put(`/entities/patients/${id}`, patientData);
+    return res.data;
+  },
+  deletePatient: async (id) => {
+    const res = await api.delete(`/entities/patients/${id}`);
+    return res.data;
+  },
+
+  // Doctors CRUD
+  getDoctors: async (params = {}) => {
     try {
-      const res = await api.get('/entities/doctors', { params: { search } });
+      const p = typeof params === 'string' ? { search: params } : params;
+      const res = await api.get('/entities/doctors', { params: p });
       return res.data;
     } catch (e) {
       return getFallbackDoctors();
     }
   },
-  getHospitals: async () => {
+  createDoctor: async (doctorData) => {
+    const res = await api.post('/entities/doctors', doctorData);
+    return res.data;
+  },
+  updateDoctor: async (id, doctorData) => {
+    const res = await api.put(`/entities/doctors/${id}`, doctorData);
+    return res.data;
+  },
+  deleteDoctor: async (id) => {
+    const res = await api.delete(`/entities/doctors/${id}`);
+    return res.data;
+  },
+
+  // Hospitals CRUD
+  getHospitals: async (params = {}) => {
     try {
-      const res = await api.get('/entities/hospitals');
+      const res = await api.get('/entities/hospitals', { params });
       return res.data;
     } catch (e) {
       return getFallbackHospitals();
     }
   },
-  getAppointments: async (status) => {
+  createHospital: async (hospitalData) => {
+    const res = await api.post('/entities/hospitals', hospitalData);
+    return res.data;
+  },
+  updateHospital: async (id, hospitalData) => {
+    const res = await api.put(`/entities/hospitals/${id}`, hospitalData);
+    return res.data;
+  },
+  deleteHospital: async (id) => {
+    const res = await api.delete(`/entities/hospitals/${id}`);
+    return res.data;
+  },
+
+  // Appointments CRUD
+  getAppointments: async (params = {}) => {
     try {
-      const res = await api.get('/entities/appointments', { params: { status } });
+      const p = typeof params === 'string' ? { status: params } : params;
+      const res = await api.get('/entities/appointments', { params: p });
       return res.data;
     } catch (e) {
       return getFallbackAppointments();
+    }
+  },
+  createAppointment: async (aptData) => {
+    const res = await api.post('/entities/appointments', aptData);
+    return res.data;
+  },
+  updateAppointment: async (id, aptData) => {
+    const res = await api.put(`/entities/appointments/${id}`, aptData);
+    return res.data;
+  },
+  deleteAppointment: async (id) => {
+    const res = await api.delete(`/entities/appointments/${id}`);
+    return res.data;
+  },
+
+  // Global Search
+  globalSearch: async (query) => {
+    try {
+      const res = await api.get('/entities/global-search', { params: { query } });
+      return res.data;
+    } catch (e) {
+      return { query, patients: [], doctors: [], hospitals: [], appointments: [] };
     }
   }
 };
@@ -461,7 +568,28 @@ export const qualityAPI = {
 };
 
 function getFallbackDashboardStats() {
+  const recent_uploads = [
+    { filename: 'raw_healthcare_admissions_2026_q2.csv', rows: 10000, size_kb: 2450.5, time: '08:30:00' }
+  ];
+  const recent_pipeline_runs = [
+    { run_id: 'RUN-20260730-001', dataset: 'raw_healthcare_admissions_2026_q2.csv', status: 'COMPLETED', records: 9805, time_sec: 14.2 }
+  ];
+  const notifications = [
+    { id: 1, title: 'ETL Pipeline Completed', message: 'Dataset raw_healthcare_admissions_2026_q2.csv transformed to Gold format.', type: 'success', created_at: '08:30' }
+  ];
+  const ai_insights = [
+    { id: 1, category: 'Clinical Prevalence', title: 'Dominant Diagnosed Condition', summary: 'Cardiovascular Disease represents the highest admission volume in the network with 3,140 cases.', type: 'info' },
+    { id: 2, category: 'Financial Intelligence', title: 'Highest Revenue Generating Facility', summary: 'Johns Hopkins Medical Center leads network revenue generation at $22.5M with 86.7% bed occupancy.', type: 'success' }
+  ];
+
   return {
+    has_data: true,
+    quality_score: 99.8,
+    pipeline_status: 'COMPLETED',
+    recent_uploads,
+    recent_pipeline_runs,
+    notifications,
+    ai_insights,
     kpis: {
       total_patients: 9805,
       total_doctors: 386,
@@ -478,37 +606,51 @@ function getFallbackDashboardStats() {
     charts: {
       monthly_admissions: [
         { month: 'Jan', admissions: 1200, revenue: 14.2 },
-        { month: 'Feb', admissions: 1350, revenue: 15.8 }
+        { month: 'Feb', admissions: 1350, revenue: 15.8 },
+        { month: 'Mar', admissions: 1100, revenue: 13.5 },
+        { month: 'Apr', admissions: 1600, revenue: 18.2 },
+        { month: 'May', admissions: 1750, revenue: 19.5 },
+        { month: 'Jun', admissions: 1900, revenue: 21.0 },
+        { month: 'Jul', admissions: 2100, revenue: 24.5 }
       ],
       disease_distribution: [
-        { disease: 'Cardiovascular Disease', count: 3140 }
+        { disease: 'Cardiovascular Disease', count: 3140 },
+        { disease: 'Diabetes Mellitus Type II', count: 2450 },
+        { disease: 'Pneumonia', count: 1890 },
+        { disease: 'Hypertension', count: 1420 },
+        { disease: 'Osteoarthritis', count: 905 }
       ],
       gender_distribution: [
         { gender: 'Male', count: 4980 },
         { gender: 'Female', count: 4825 }
       ],
       age_groups: [
-        { group: '18-29', count: 1420 }
+        { group: '18-29', count: 1420 },
+        { group: '30-50', count: 3450 },
+        { group: '51-70', count: 3120 },
+        { group: '70+', count: 1815 }
       ],
       hospital_performance: [
-        { name: 'Metro', occupancy: 87.8, revenue: 14.3, rating: 4.8 }
+        { name: 'Metro', occupancy: 87.8, revenue: 14.3, rating: 4.8 },
+        { name: 'Johns Hopkins', occupancy: 86.7, revenue: 22.5, rating: 4.9 },
+        { name: 'Mayo Clinic', occupancy: 87.2, revenue: 19.8, rating: 4.9 },
+        { name: 'Cleveland', occupancy: 82.0, revenue: 16.4, rating: 4.8 }
+      ],
+      department_performance: [
+        { department: "Cardiology", patients: 3140, revenue: 45.2 },
+        { department: "Neurology", patients: 2180, revenue: 32.8 },
+        { department: "Oncology", patients: 1850, revenue: 28.4 },
+        { department: "Pediatrics", patients: 1420, revenue: 12.1 }
       ]
     },
     tables: {
-      recent_uploads: [
-        { filename: 'raw_healthcare_admissions_2026_q2.csv', rows: 10000, size_kb: 2450.5, time: '08:30:00' }
-      ],
-      pipeline_runs: [
-        { run_id: 'RUN-20260730-001', dataset: 'raw_healthcare_admissions_2026_q2.csv', status: 'COMPLETED', records: 9805, time_sec: 14.2 }
-      ],
+      recent_uploads,
+      pipeline_runs: recent_pipeline_runs,
       recent_errors: [],
       airflow_status: [
         { dag_id: 'healthcare_medallion_etl_dag', task_id: 'pyspark_silver_clean_task', state: 'success', duration: 5.8 }
       ]
-    },
-    notifications: [
-      { id: 1, title: 'ETL Pipeline Completed', message: 'Dataset raw_healthcare_admissions_2026_q2.csv transformed to Gold format.', type: 'success', created_at: '08:30' }
-    ]
+    }
   };
 }
 

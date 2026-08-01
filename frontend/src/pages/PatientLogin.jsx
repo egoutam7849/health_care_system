@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 export const PatientLogin = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [email, setEmail] = useState('emily.watson@gmail.com');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('patient123');
   const [loading, setLoading] = useState(false);
 
@@ -53,6 +53,30 @@ export const PatientLogin = () => {
             </div>
             <h2 className="text-2xl font-black tracking-tight">Patient Health Portal</h2>
             <p className="text-xs text-slate-400">View your personal medical history, lab reports, appointments & billing</p>
+          </div>
+
+          <div className="flex gap-2 justify-center pb-2">
+            <button
+              type="button"
+              onClick={() => setEmail('alice@healthflow.ai')}
+              className={`px-3 py-1 text-[11px] font-bold rounded-lg transition-colors ${email === 'alice@healthflow.ai' ? 'bg-purple-500 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}`}
+            >
+              Alice
+            </button>
+            <button
+              type="button"
+              onClick={() => setEmail('bob@healthflow.ai')}
+              className={`px-3 py-1 text-[11px] font-bold rounded-lg transition-colors ${email === 'bob@healthflow.ai' ? 'bg-purple-500 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}`}
+            >
+              Bob
+            </button>
+            <button
+              type="button"
+              onClick={() => setEmail('charlie@healthflow.ai')}
+              className={`px-3 py-1 text-[11px] font-bold rounded-lg transition-colors ${email === 'charlie@healthflow.ai' ? 'bg-purple-500 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}`}
+            >
+              Charlie
+            </button>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">

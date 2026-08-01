@@ -36,9 +36,13 @@ app.add_middleware(
 # Mount Routers
 app.include_router(auth.router, prefix=settings.API_V1_STR)
 app.include_router(dashboard.router, prefix=settings.API_V1_STR)
+app.include_router(dashboard.router, prefix="/api")
+app.include_router(dashboard.router, prefix="")
 app.include_router(upload.router, prefix=settings.API_V1_STR)
 app.include_router(medallion.router, prefix=settings.API_V1_STR)
 app.include_router(entities.router, prefix=settings.API_V1_STR)
+app.include_router(entities.router, prefix="/api")
+app.include_router(entities.router, prefix="")
 app.include_router(etl.router, prefix=settings.API_V1_STR)
 app.include_router(airflow.router, prefix=settings.API_V1_STR)
 app.include_router(quality.router, prefix=settings.API_V1_STR)
@@ -51,6 +55,8 @@ app.include_router(ai_insights.router, prefix=settings.API_V1_STR)
 app.include_router(mapping.router, prefix=settings.API_V1_STR)
 app.include_router(incoming.router, prefix=settings.API_V1_STR)
 app.include_router(portals.router, prefix=settings.API_V1_STR)
+app.include_router(portals.router, prefix="/api")
+app.include_router(portals.router, prefix="")
 
 @app.get("/")
 def root():
