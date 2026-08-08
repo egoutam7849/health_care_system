@@ -17,10 +17,19 @@ import { AnalystLogin } from './pages/AnalystLogin';
 // Patient Portal Pages
 import { PatientLayout } from './components/layouts/PatientLayout';
 import { PatientDashboard } from './pages/PatientDashboard';
+import { PatientMyHealth } from './pages/PatientMyHealth';
 import { PatientAppointments } from './pages/PatientAppointments';
 import { PatientRecords } from './pages/PatientRecords';
 import { PatientPrescriptions } from './pages/PatientPrescriptions';
+import { PatientLabReports } from './pages/PatientLabReports';
+import { PatientHealthMetrics } from './pages/PatientHealthMetrics';
 import { PatientBilling } from './pages/PatientBilling';
+import { PatientMessages } from './pages/PatientMessages';
+import { PatientNotifications } from './pages/PatientNotifications';
+import { PatientAIAssistant } from './pages/PatientAIAssistant';
+import { PatientDocuments } from './pages/PatientDocuments';
+import { PatientProfile } from './pages/PatientProfile';
+import { PatientSettings } from './pages/PatientSettings';
 
 // Analyst Portal Pages
 import { AnalystDashboard } from './pages/AnalystDashboard';
@@ -105,12 +114,19 @@ export function App() {
               {/* Patient Portal — Digital Health Workspace */}
               <Route path="/patient" element={<Navigate to="/patient/dashboard" replace />} />
               <Route path="/patient/dashboard" element={<ProtectedPatientRoute><PatientLayout><PatientDashboard /></PatientLayout></ProtectedPatientRoute>} />
+              <Route path="/patient/my-health" element={<ProtectedPatientRoute><PatientLayout><PatientMyHealth /></PatientLayout></ProtectedPatientRoute>} />
               <Route path="/patient/appointments" element={<ProtectedPatientRoute><PatientLayout><PatientAppointments /></PatientLayout></ProtectedPatientRoute>} />
               <Route path="/patient/records" element={<ProtectedPatientRoute><PatientLayout><PatientRecords /></PatientLayout></ProtectedPatientRoute>} />
               <Route path="/patient/prescriptions" element={<ProtectedPatientRoute><PatientLayout><PatientPrescriptions /></PatientLayout></ProtectedPatientRoute>} />
+              <Route path="/patient/lab-reports" element={<ProtectedPatientRoute><PatientLayout><PatientLabReports /></PatientLayout></ProtectedPatientRoute>} />
+              <Route path="/patient/metrics" element={<ProtectedPatientRoute><PatientLayout><PatientHealthMetrics /></PatientLayout></ProtectedPatientRoute>} />
               <Route path="/patient/billing" element={<ProtectedPatientRoute><PatientLayout><PatientBilling /></PatientLayout></ProtectedPatientRoute>} />
-              <Route path="/patient/profile" element={<ProtectedPatientRoute><PatientLayout><PatientDashboard /></PatientLayout></ProtectedPatientRoute>} />
-              <Route path="/patient/settings" element={<ProtectedPatientRoute><PatientLayout><PatientDashboard /></PatientLayout></ProtectedPatientRoute>} />
+              <Route path="/patient/messages" element={<ProtectedPatientRoute><PatientLayout><PatientMessages /></PatientLayout></ProtectedPatientRoute>} />
+              <Route path="/patient/notifications" element={<ProtectedPatientRoute><PatientLayout><PatientNotifications /></PatientLayout></ProtectedPatientRoute>} />
+              <Route path="/patient/ai-assistant" element={<ProtectedPatientRoute><PatientLayout><PatientAIAssistant /></PatientLayout></ProtectedPatientRoute>} />
+              <Route path="/patient/documents" element={<ProtectedPatientRoute><PatientLayout><PatientDocuments /></PatientLayout></ProtectedPatientRoute>} />
+              <Route path="/patient/profile" element={<ProtectedPatientRoute><PatientLayout><PatientProfile /></PatientLayout></ProtectedPatientRoute>} />
+              <Route path="/patient/settings" element={<ProtectedPatientRoute><PatientLayout><PatientSettings /></PatientLayout></ProtectedPatientRoute>} />
               <Route path="/analytics/dashboard" element={<ProtectedAnalystRoute><AnalystDashboard /></ProtectedAnalystRoute>} />
 
               {/* Doctor Portal — Clinical Workspace (all wrapped in DoctorLayout) */}
